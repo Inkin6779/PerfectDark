@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>N64 Emulator</title>
+    <script>
+        window.onload = function() {
+            const romUrl = 'insert.z64';
+            const emulatorContainer = document.getElementById('emulator');
+
+            try {
+                // Attempt to load the ROM
+                const script = document.createElement('script');
+                script.src = 'https://www.neilb.net/n64wasm/n64wasm.js';
+                script.onload = function() {
+                    // Initialize the emulator with the ROM
+                    try {
+                        const emulator = new N64Wasm();
+                        emulator.loadROM(romUrl);
+                    } catch (romError) {
+                        console.error('Error loading the ROM:', romError);
+                        emulatorContainer.innerHTML = '<p style="color: red;">Failed to load the ROM. Please check the file and try again.</p>';
+                    }
+                };
+                script.onerror = function() {
+                    console.error('Error loading the emulator script.');
+                    emulatorContainer.innerHTML = '<p style="color: red;">Failed to load the emulator. Please try again later.</p>';
+                };
+                document.head.appendChild(script);
+            } catch (error) {
+                console.error('An unexpected error occurred:', error);
+                emulatorContainer.innerHTML = '<p style="color: red;">An unexpected error occurred. Please refresh the page.</p>';
+            }
+        };
+    </script>
+</head>
+<body>
+    <h1>Welcome to the N64 Emulator</h1>
+    <div id="emulator">
+        <p>Loading the emulator...</p>
+    </div>
+</body>
+</html>
